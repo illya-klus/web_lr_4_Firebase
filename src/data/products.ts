@@ -1,4 +1,4 @@
-import { Product } from "../features/products/data/productsApi";
+import { Product } from "../features/products/api/productsApi";
 
 export const products: Product[] = [
   {
