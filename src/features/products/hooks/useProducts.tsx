@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useContext,  useState } from "react";
-import { downloadProducts, type Product } from "./productsApi";
+import { downloadProducts, Product } from "../api/productsApi";
+
 
 type Filters = {
     search ?: string;

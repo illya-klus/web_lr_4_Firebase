@@ -1,4 +1,5 @@
-import { useCart } from "../data/useCart";
+
+import { useCart } from "../hooks/useCart";
 import CartItemCard from "./cartItemCard";
 
 

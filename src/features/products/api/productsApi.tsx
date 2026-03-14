@@ -1,5 +1,6 @@
 import { products } from "../../../data/products";
 
+
 export type Product = {
     id: number;
     brand: string;

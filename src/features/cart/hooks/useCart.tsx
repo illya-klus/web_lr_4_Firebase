@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useContext, useState  } from "react";
-import { Product } from "../../products/data/productsApi";
+import { Product } from "../../products/api/productsApi";
+
 
 
 export type CartItem = {

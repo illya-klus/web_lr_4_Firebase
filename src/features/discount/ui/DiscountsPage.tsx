@@ -1,7 +1,7 @@
 import Timer from "./Timer";
 import ProductCard from "../../products/ui/ProductItemCard";
 import { useEffect, useState } from "react";
-import { downloadProductsWithDiscount, Product } from "../../products/data/productsApi";
+import { downloadProductsWithDiscount, Product } from "../../products/api/productsApi";
 
 
 

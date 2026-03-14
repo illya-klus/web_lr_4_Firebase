@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useProducts } from "../data/useProducts";
+import { useProducts } from "../hooks/useProducts";
+
 
 type SortType = "price-asc" | "price-desc" | "none";
 type UIState = {

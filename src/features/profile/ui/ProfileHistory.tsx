@@ -1,5 +1,6 @@
 import ProductCard from "../../products/ui/ProductItemCard";
-import { useHistoryContext } from "./HistoryContext";
+import { useHistoryContext } from "../context/HistoryContext";
+
 
 const ProfileHistory = () => {
     const {visited, clearVisited} = useHistoryContext();

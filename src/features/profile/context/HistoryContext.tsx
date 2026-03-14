@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext, useState } from "react";
-import { useProducts } from "../../products/data/useProducts";
-import { Product } from "../../products/data/productsApi";
+import { Product } from "../../products/api/productsApi";
+import { useProducts } from "../../products/hooks/useProducts";
+
 
 
 

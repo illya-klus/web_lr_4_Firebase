@@ -1,20 +1,21 @@
 import { createBrowserRouter} from 'react-router'
 
-import Layout from "./Layout";
-import ProductsPage from "../products/ui/ProductsPage";
-import AboutUs from "../about_us/AboutUsPage";
-import DiscountPage from "../discount/ui/DiscountsPage";
-import ProfilePage from "../profile/ProfilePage";
-import RegisterPage from "../auth/ui/RegisterPage";
+
 
 import NotFound from './NotFoundPage';
-
-import ProfileHistory from '../profile/profileHistory/ProfileHistory';
-
+import Layout from './Layout';
+import ProductsPage from '../features/products/ui/ProductsPage';
+import AboutUs from '../features/about/ui/AboutUsPage';
+import DiscountPage from '../features/discount/ui/DiscountsPage';
+import ItemPage from '../features/item/ui/ItemPage';
+import ProfilePage from '../features/profile/ui/ProfilePage';
+import Cart from '../features/cart/ui/Cart';
+import ProfileHistory from '../features/profile/ui/ProfileHistory';
 import AuthLayout from './AuthLayout';
-import ItemPage from '../item_page/ItemPage';
-import Cart from '../cart/ui/Cart';
-import LoginPage from '../auth/ui/LoginPage';
+import RegisterPage from '../features/auth/ui/RegisterPage';
+import LoginPage from '../features/auth/ui/LoginPage';
+
+
 
 
 

@@ -1,5 +1,6 @@
-import { useCart } from "../cart/data/useCart";
-import { useItem } from "./useItem";
+import { useCart } from "../../cart/hooks/useCart";
+import { useItem } from "../hooks/useItem";
+
 
 
 

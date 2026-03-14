@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router";
-import { useCart } from "../../cart/data/useCart";
-import { Product } from "../data/productsApi";
-import { useHistoryContext } from "../../profile/profileHistory/HistoryContext";
+import { Product } from "../api/productsApi";
+import { useHistoryContext } from "../../profile/context/HistoryContext";
+import { useCart } from "../../cart/hooks/useCart";
+
+
 
 type ProductCardProps = {
   product: Product;

@@ -1,4 +1,5 @@
-import { CartItem, useCart } from "../data/useCart";
+import { CartItem, useCart } from "../hooks/useCart";
+
 
 type Props = {
   item: CartItem;
