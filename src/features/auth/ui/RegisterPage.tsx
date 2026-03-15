@@ -1,10 +1,16 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import useValidation from "../hooks/useValidation";
+import { registerUser } from "../api/authApi";
+import { useErrorModal } from "../../../modals/error/hooks/useErrorModal";
+import { useSeccessModal } from "../../../modals/seccess/hooks/useSeccessModal";
+
 
 
 
 const RegisterPage = () => {
 
+  let {showError, ErrorModalComponent} = useErrorModal();
+  let {showSeccess, SeccessModalComponent} = useSeccessModal();
   let [emailInput, setEmailInput] = useState<string>("");
   let [firstPasswordInput, setFirstPasswordInput] = useState<string>("");
   let [secondPasswordInput, setSecondPasswordInput] = useState<string>("");
@@ -24,14 +30,21 @@ const RegisterPage = () => {
     validatePasswordsIdentity(firstPasswordInput, e.target.value);
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     validateEmail(emailInput);
     validatePassword(firstPasswordInput);
     validatePassword(secondPasswordInput);
 
     if (!mistakes.emailError && !mistakes.passwordError && !mistakes.passwordsIdentityError) {
-      console.log("Form valid", { emailInput, firstPasswordInput, secondPasswordInput});
+      let result = await registerUser(emailInput, firstPasswordInput);
+      if(result.seccesfull){
+        console.log(result.body.user);
+        showSeccess("Welcome to Sport Shop");
+      }else{
+        console.log(result.body.error); 
+        showError(result.body.error.message);
+      }
     }
   }
 
@@ -47,6 +60,8 @@ const RegisterPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 pt-45 px-4 sm:flex sm:items-center sm:justify-center sm:p-0">
+      <SeccessModalComponent/>
+      <ErrorModalComponent/>
 
       <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4 p-6 sm:p-8 bg-white rounded-xl shadow-md w-full max-w-sm">
 
