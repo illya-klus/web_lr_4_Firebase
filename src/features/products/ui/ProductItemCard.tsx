@@ -85,7 +85,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
     <div className="relative flex flex-col gap-3 p-3 sm:p-4 max-w-full sm:max-w-60 select-none border-0 transition">
       
       <ProductDiscount discount={product.discount}/>
-      <ProductImage id={product.id} image={product.image}/>
+      <ProductImage id={product.id} image={product.image||""}/>
 
       <div className="flex flex-col gap-1">
         <h3 className="text-sm sm:text-sm font-bold">{product.title}</h3>

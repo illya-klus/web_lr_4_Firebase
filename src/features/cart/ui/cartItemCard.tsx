@@ -17,7 +17,7 @@ const CartItemCard = ({ item }: Props) => {
     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 p-4 bg-white transition border-b border-b-gray-300">
       <div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0">
         <img
-          src={product.image}
+          src={product.image || ""}
           className="w-full h-full object-cover rounded-lg"
         />
       </div>
