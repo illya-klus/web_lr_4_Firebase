@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router";
-import { Product } from "../api/productsApi";
 import { useHistoryContext } from "../../profile/context/HistoryContext";
 import { useCart } from "../../cart/hooks/useCart";
+import { ProductDto } from "../../../firebase/db/products";
 
 
 
 type ProductCardProps = {
-  product: Product;
-  onAddToCart?: (product: Product) => void;
+  product: ProductDto;
+  onAddToCart?: (product: ProductDto) => void;
 };
 
 
@@ -21,7 +21,7 @@ const ProductDiscount = ({discount} : {discount: number | null}) => {
     </div>
   )
 }
-const ProductImage = ({id, image} : {id : number, image: string}) => {
+const ProductImage = ({id, image} : {id : string, image: string}) => {
   const navigate = useNavigate();
   const {addToVisited} = useHistoryContext()
 
@@ -38,7 +38,7 @@ const ProductImage = ({id, image} : {id : number, image: string}) => {
     </div>
   );
 }
-const  CostAndBtnBuy = ({product} : {product : Product}) => {
+const  CostAndBtnBuy = ({product} : {product : ProductDto}) => {
 
   const { addToCart, isInCart } = useCart();
 

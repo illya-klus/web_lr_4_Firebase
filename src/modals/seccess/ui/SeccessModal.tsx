@@ -16,7 +16,7 @@ export default function SuccessModal({ message, onClose }: Props) {
   },[]);
 
   return (
-    <div className="fixed top-6 right-6 z-50">
+    <div className="fixed top-30 right-6 z-50">
       <div className="
         max-w-sm w-full
         bg-green-400 text-white

@@ -1,10 +1,11 @@
 import { createContext, ReactNode, useContext, useState  } from "react";
-import { Product } from "../../products/api/productsApi";
+
+import { ProductDto } from "../../../firebase/db/products";
 
 
 
 export type CartItem = {
-  product: Product;
+  product: ProductDto;
   count: number;
 };
 
@@ -13,11 +14,11 @@ export type CartItem = {
 type CartContextType = {
     products: CartItem[];
     total: number;
-    addToCart: (product: Product) => void;
-    removeFromCart: (id: number) => void;
+    addToCart: (product: ProductDto) => void;
+    removeFromCart: (id: string) => void;
     clearCart: () => void;
-    removeItemFromCart: (id: number) => void;
-    isInCart: (id:number) => boolean;
+    removeItemFromCart: (id: string) => void;
+    isInCart: (id:string) => boolean;
     getCartLen : () => number;
 }
 
@@ -33,7 +34,7 @@ export const useCart = () => {
 export const CartProvider = ({children} : {children : ReactNode}) => {
     let [products, setProducts] = useState<CartItem[]>([]);
 
-    const addToCart = (product: Product) => {
+    const addToCart = (product: ProductDto) => {
         setProducts( prev => {
             let findedProduct = prev.find(item => item.product.id === product.id);
 
@@ -49,7 +50,7 @@ export const CartProvider = ({children} : {children : ReactNode}) => {
         });
     }
 
-    const removeFromCart = (id:number) => {
+    const removeFromCart = (id:string) => {
         setProducts( (prev) => 
             prev
             .map(
@@ -60,7 +61,7 @@ export const CartProvider = ({children} : {children : ReactNode}) => {
         );
     }
 
-    const removeItemFromCart = (id:number) =>{
+    const removeItemFromCart = (id:string) =>{
         setProducts( (prev) => 
             prev.filter(item => item.product.id !== id)
         );
@@ -70,7 +71,7 @@ export const CartProvider = ({children} : {children : ReactNode}) => {
         setProducts([]);
     }
 
-    const isInCart = (id: number) => {
+    const isInCart = (id: string) => {
         return products.find(i => i.product.id === id) ? true : false;
     }
     const getCartLen = () => {

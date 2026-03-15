@@ -6,7 +6,7 @@ export const useItem = () => {
     const {getProduct} = useProducts();
     let {id} = useParams();
     console.log(id);
-    let product = getProduct(Number(id));
+    let product = getProduct(""+id);
 
     if(product){
         return product;

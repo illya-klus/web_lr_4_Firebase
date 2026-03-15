@@ -7,7 +7,6 @@ import { AuthProvider } from "./features/auth/context/useAuthContext"
 
 
 function App() {
-
   return (
     <AuthProvider>
       <ProductsProvider> 

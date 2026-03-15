@@ -1,5 +1,6 @@
-import { createContext, ReactNode, useContext,  useState } from "react";
-import { downloadProducts, Product } from "../api/productsApi";
+import { createContext, ReactNode, useContext,  useEffect,  useState } from "react";
+import { downloadProducts} from "../api/productsApi";
+import { ProductDto } from "../../../firebase/db/products";
 
 
 type Filters = {
@@ -9,10 +10,10 @@ type Filters = {
 };
 
 type ProductsContextType = { 
-    products: Product[] ;
-    getProduct : (id: number) => Product | null;
+    products: ProductDto[] ;
+    getProduct : (id: string) => ProductDto | null;
     filterProducts : (filters: Filters) => void;
-    filteredProducts : Product[] ;
+    filteredProducts : ProductDto[] ;
 };
 
 
@@ -27,12 +28,22 @@ export const useProducts = () =>{
 
 
 export const ProductsProvider = ( {children} : {children : ReactNode} ) => {
-    let [products] = useState<Product[]>(downloadProducts());
+    let [products, setProducts] = useState<ProductDto[]>([]);
 
-    let [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
+    useEffect(() => {
+        const loadProducts = async () => {
+            const data = await downloadProducts();
+            setProducts(data);
+            setFilteredProducts(data);
+        };
+
+        loadProducts();
+    }, []);
+
+    let [filteredProducts, setFilteredProducts] = useState<ProductDto[]>(products);
     let [filters, setFilters] = useState<Filters>({});
 
-    const getProduct = (id: number) => {
+    const getProduct = (id: string) => {
         return products.find(i => i.id === id) || null;
     }
 
@@ -74,7 +85,7 @@ export const ProductsProvider = ( {children} : {children : ReactNode} ) => {
     );
 }
 
-const getFinalPrice = (p: Product) =>
+const getFinalPrice = (p: ProductDto) =>
   p.discount ? p.price * (1 - p.discount / 100) : p.price;
 
 

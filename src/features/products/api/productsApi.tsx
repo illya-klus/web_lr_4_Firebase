@@ -1,24 +1,13 @@
 import { products } from "../../../data/products";
+import { getProducts } from "../../../firebase/db/products";
 
-
-export type Product = {
-    id: number;
-    brand: string;
-    title : string;
-    description : string;
-    price : number;
-    discount : number | null;
-    stock : number;
-    currency : string;
-    image : string;
+export const downloadProducts = async () => {
+    return getProducts();
 }
 
-export const downloadProducts = () : Product[] => {
-    return products;
-}
-
-export const downloadProductsWithDiscount = () => {
-  return products.filter(item => item.discount != null);
+export const downloadProductsWithDiscount = async () => {
+    let productsWithDiscount = await getProducts();
+  return productsWithDiscount.filter(item => item.discount != null);
 };
 
 

@@ -1,15 +1,20 @@
 import Timer from "./Timer";
 import ProductCard from "../../products/ui/ProductItemCard";
 import { useEffect, useState } from "react";
-import { downloadProductsWithDiscount, Product } from "../../products/api/productsApi";
+import { downloadProductsWithDiscount } from "../../products/api/productsApi";
+import { ProductDto } from "../../../firebase/db/products";
 
 
 
 const DiscountPage = () => {
-    let [products, setProducts] = useState<Product[]>([]);
+    let [products, setProducts] = useState<ProductDto[]>([]);
 
     useEffect(() => {
-        setProducts(downloadProductsWithDiscount());
+        const download = async () =>{
+            let discountProducts = await downloadProductsWithDiscount();
+            setProducts(discountProducts);
+        }
+        download();
     }, []);
 
     const deadline = new Date(2026, 2, 10, 12);

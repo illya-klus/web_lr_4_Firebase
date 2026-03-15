@@ -1,14 +1,14 @@
 import { createContext, ReactNode, useContext, useState } from "react";
-import { Product } from "../../products/api/productsApi";
 import { useProducts } from "../../products/hooks/useProducts";
+import { ProductDto } from "../../../firebase/db/products";
 
 
 
 
 
 type HistoryContext = {
-    visited : Product[];
-    addToVisited: (id:number) => void;
+    visited : ProductDto[];
+    addToVisited: (id:string) => void;
     clearVisited: () => void;
 }
 
@@ -26,10 +26,10 @@ export const useHistoryContext = () => {
 
 
 export const HistoryContextProvider = ({children} : {children:ReactNode}) => {
-    let [visited, setVisited] = useState<Product[]>([]);
+    let [visited, setVisited] = useState<ProductDto[]>([]);
     const {getProduct} = useProducts();
 
-    const addToVisited = (id: number) => {
+    const addToVisited = (id: string) => {
         let newItem = getProduct(id);
         if (!newItem) return;
         setVisited(prev => [...prev, newItem]);
