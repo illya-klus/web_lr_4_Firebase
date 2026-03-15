@@ -35,20 +35,27 @@ export const CartProvider = ({children} : {children : ReactNode}) => {
     let [products, setProducts] = useState<CartItem[]>([]);
 
     const addToCart = (product: ProductDto) => {
-        setProducts( prev => {
-            let findedProduct = prev.find(item => item.product.id === product.id);
-
-            if(findedProduct){
-                return prev.map(
-                    item => item.product.id === product.id
-                    ? {...item, count: item.count+1}
-                    : item
-                )
+        setProducts(prev => {
+          const foundProduct = prev.find(item => item.product.id === product.id);
+        
+          if (foundProduct) {
+            // якщо кількість менше stock, збільшуємо
+            if (foundProduct.count < foundProduct.product.stock) {
+              return prev.map(item =>
+                item.product.id === product.id
+                  ? { ...item, count: item.count + 1 }
+                  : item
+              );
+            } else {
+              // вже досягли максимум stock – нічого не робимо
+              return prev;
             }
-
-            return [...prev, {product, count: 1}];
+          }
+      
+          // продукту ще немає у кошику – додаємо з count = 1
+          return [...prev, { product, count: 1 }];
         });
-    }
+    };
 
     const removeFromCart = (id:string) => {
         setProducts( (prev) => 

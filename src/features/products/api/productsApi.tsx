@@ -1,4 +1,3 @@
-import { products } from "../../../data/products";
 import { getProducts } from "../../../firebase/db/products";
 
 export const downloadProducts = async () => {
