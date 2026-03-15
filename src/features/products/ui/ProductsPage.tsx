@@ -63,7 +63,7 @@ const ProductsPage = () => {
                 <div className="max-w-180 m-auto grid grid-cols-3 sm:grid-cols-4 gap-3 sm:gap-8">
                     {Brands.map(item => {
                         return(
-                            <div className="bg-white border-0 rounded-xl p-2 sm:p-4 flex items-center justify-center">
+                            <div key={item.src} className="bg-white border-0 rounded-xl p-2 sm:p-4 flex items-center justify-center">
                                 <img src={item.src} />
                             </div>
                         );
@@ -72,7 +72,7 @@ const ProductsPage = () => {
             </div>
 
             <ul className="px-3 info flex flex-wrap max-w-250 mx-auto mt-6 sm:mt-10 rounded-lg shadow-md">
-                {ItemsForInfoSection.map(item => <InfoCard src={item.src} text={item.text} />)}
+                {ItemsForInfoSection.map(item => <InfoCard key={item.src} src={item.src} text={item.text} />)}
             </ul>
 
             <div className=" flex flex-col gap-0 items-center w-full px-3 sm:px-0">

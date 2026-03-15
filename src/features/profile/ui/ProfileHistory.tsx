@@ -1,9 +1,13 @@
+import { useAuth } from "../../auth/context/useAuthContext";
 import ProductCard from "../../products/ui/ProductItemCard";
 import { useHistoryContext } from "../context/HistoryContext";
 
 
 const ProfileHistory = () => {
     const {visited, clearVisited} = useHistoryContext();
+  const {user} = useAuth();
+  
+  if(user.role === "anon") return;
 
   return (
     <section className="flex flex-col gap-6 p-4 sm:p-6 bg-white">
