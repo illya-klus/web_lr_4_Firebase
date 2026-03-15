@@ -35,7 +35,7 @@ const defaultUserData : User = {
         role: "anon",
         authStatus : "not_identify",
         userEmail : "",
-        userName : "user", 
+        userName : "user_92348", 
         userPhoneNumber : "",
         userId: "none",
     };
@@ -64,7 +64,7 @@ export const AuthProvider = ({children} : {children : ReactNode}) => {
         const responceUser = result.body.user;
         let userData = {
             userEmail: responceUser.email,
-            userName: "",
+            userName: "no_name",
             userPhoneNumber: "",
             userId: responceUser.uid,
             role: "user",

@@ -18,6 +18,7 @@ type CartContextType = {
     clearCart: () => void;
     removeItemFromCart: (id: number) => void;
     isInCart: (id:number) => boolean;
+    getCartLen : () => number;
 }
 
 
@@ -72,12 +73,15 @@ export const CartProvider = ({children} : {children : ReactNode}) => {
     const isInCart = (id: number) => {
         return products.find(i => i.product.id === id) ? true : false;
     }
+    const getCartLen = () => {
+        return products.length;
+    }
 
     const total = products.reduce((a, i) => a += i.count*i.product.price , 0);
 
 
     return(
-        <CartContext.Provider value={ { products, total, addToCart, removeFromCart, clearCart, removeItemFromCart, isInCart} }>
+        <CartContext.Provider value={ { products, total, addToCart, removeFromCart, clearCart, removeItemFromCart, isInCart, getCartLen} }>
             {children}
         </CartContext.Provider>
     );
