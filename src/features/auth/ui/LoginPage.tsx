@@ -39,6 +39,7 @@ const LoginPage = () => {
       if(result.seccesfull){
         console.log(result.body.user);
         setUserDataFromResponce(result);
+        
         navigate('/');
         showSeccess("Welcome back to Sport Shop");
       }else{

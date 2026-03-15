@@ -3,6 +3,7 @@ import { SuccessReturn } from "../api/authApi";
 import avatar from "/public/images/avatar.jpg";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useSeccessModal } from "../../../modals/seccess/hooks/useSeccessModal";
+import { getUserById, saveUserToFirestore, updateUserField } from "../../../firebase/db/users";
 
 
 export type User = {
@@ -23,6 +24,7 @@ type AuthContextType = {
     setUserData : (email: string, name: string, number: string) => void;
     setUserFullData: (newUser: Partial<User>) => void;
     setUserDataFromResponce: (result : SuccessReturn) => void;
+    addUserToDataBase : (user: User) => void;
 }
 
 
@@ -60,25 +62,39 @@ export const AuthProvider = ({children} : {children : ReactNode}) => {
 
     const setUserData = (email: string, name: string, number: string) => {
         setAuthState((prev) => ({...prev, userEmail: email, userName: name, userPhoneNumber: number}));
+        updateUserField(authState.userId, email, name, number);
     }
 
     const setUserFullData = (newUser: Partial<User>) => {
         setAuthState(prev => ({ ...prev, ...newUser }));
     }
 
-    const setUserDataFromResponce = (result : SuccessReturn) => {
+    const setUserDataFromResponce = async (result : SuccessReturn) => {
         const responceUser = result.body.user;
-        let userData = {
-            userEmail: responceUser.email,
-            userName: responceUser.displayName ? responceUser.displayName : "no_name",
-            userPhoneNumber: "",
-            userId: responceUser.uid,
-            role: "user",
-            authStatus: "identify",
-            photoUrl : avatar,
-            //responceUser.photoURL,
-        } as User;
+        const user = await getUserById(responceUser.uid);
+        let userData;
+
+        if(user){
+            userData = {...user};
+        }else{
+            userData = {
+                userEmail: responceUser.email,
+                userName: responceUser.displayName ? responceUser.displayName : "no_name",
+                userPhoneNumber: "",
+                userId: responceUser.uid,
+                role: "user",
+                authStatus: "identify",
+                photoUrl : avatar,
+                //responceUser.photoURL,
+            } as User;
+            addUserToDataBase(userData);
+        }
+
         setUserFullData(userData);
+    }
+
+    const addUserToDataBase = (user : User) => {
+        saveUserToFirestore(user);
     }
 
     useEffect(() => {
@@ -113,6 +129,7 @@ export const AuthProvider = ({children} : {children : ReactNode}) => {
             setUserData,
             setUserFullData,
             setUserDataFromResponce,
+            addUserToDataBase,
         }}>
             <SeccessModalComponent/>
             {children}

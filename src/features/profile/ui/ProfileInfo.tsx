@@ -3,6 +3,7 @@ import { useAuth } from "../../auth/context/useAuthContext";
 import { useCart } from "../../cart/hooks/useCart";
 
 
+
 type InputField = "name" | "email" | "phone";
 
 const ProfileInfo = () => {
