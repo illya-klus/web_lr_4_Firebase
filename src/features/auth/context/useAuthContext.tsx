@@ -61,8 +61,10 @@ export const AuthProvider = ({children} : {children : ReactNode}) => {
     }
 
     const setUserData = (email: string, name: string, number: string) => {
-        setAuthState((prev) => ({...prev, userEmail: email, userName: name, userPhoneNumber: number}));
-        updateUserField(authState.userId, email, name, number);
+      setAuthState((prev) => ({...prev, userEmail: email, userName: name, userPhoneNumber: number}));
+      if (authState.userId !== "none") {
+        updateUserField(authState.userId, name, email, number);
+      }
     }
 
     const setUserFullData = (newUser: Partial<User>) => {
@@ -99,25 +101,29 @@ export const AuthProvider = ({children} : {children : ReactNode}) => {
 
     useEffect(() => {
         const auth = getAuth();
-        const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
           if (firebaseUser) {
-            // Користувач залогінений — оновлюємо контекст
-            setUserFullData({
-              userEmail: firebaseUser.email || "",
-              userName: firebaseUser.displayName || "no_name",
-              userId: firebaseUser.uid,
-              authStatus: "identify",
-              role: "user",
-              photoUrl:  avatar, //firebaseUser.photoURL || avatar
-            });
+            const userFromDB = await getUserById(firebaseUser.uid);
+            if (userFromDB) {
+              setUserFullData(userFromDB);
+            } else {
+              // fallback, якщо немає користувача в DB
+              setUserFullData({
+                userEmail: firebaseUser.email || "",
+                userName: firebaseUser.displayName || "no_name",
+                userId: firebaseUser.uid,
+                authStatus: "identify",
+                role: "user",
+                photoUrl: avatar,
+              });
+            }
             showSeccess("Раді вас знову бачити!");
           } else {
-            // Користувач не залогінений — повертаємо анонімного
             setUserFullData(defaultUserData);
           }
         });
 
-        return () => unsubscribe(); // чистимо підписку при демонт
+        return () => unsubscribe();
     }, []);
 
 

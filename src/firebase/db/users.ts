@@ -53,7 +53,7 @@ export const getUserById = async (userId: string): Promise<User | null> => {
       role: data.role,
       authStatus: data.authStatus,
       userEmail: data.email,
-      userName: data.name,
+      userName: data.userName,
       userPhoneNumber: data.phoneNumber,
       userId: userId,
       photoUrl: data.photoUrl,
