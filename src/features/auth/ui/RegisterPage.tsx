@@ -1,14 +1,19 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import useValidation from "../hooks/useValidation";
-import { registerUser } from "../api/authApi";
+import { registerUser, SuccessReturn } from "../api/authApi";
 import { useErrorModal } from "../../../modals/error/hooks/useErrorModal";
 import { useSeccessModal } from "../../../modals/seccess/hooks/useSeccessModal";
+import { useNavigate } from "react-router-dom";
 
 
+type Props = {
+  setUser : (result : SuccessReturn) => void;
+}
 
 
-const RegisterPage = () => {
-
+const RegisterPage = ({setUser} : Props) => {
+  
+  const navigate = useNavigate();
   let {showError, ErrorModalComponent} = useErrorModal();
   let {showSeccess, SeccessModalComponent} = useSeccessModal();
   let [emailInput, setEmailInput] = useState<string>("");
@@ -16,6 +21,14 @@ const RegisterPage = () => {
   let [secondPasswordInput, setSecondPasswordInput] = useState<string>("");
 
   const {mistakes, validateEmail, validatePassword, validatePasswordsIdentity} = useValidation();
+
+  const hasErrors = 
+    !emailInput ||
+    !firstPasswordInput ||
+    !secondPasswordInput ||
+    mistakes.emailError !== "" ||
+    mistakes.passwordError !== "" ||
+    mistakes.passwordsIdentityError !== "";
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmailInput(e.target.value);
@@ -36,25 +49,20 @@ const RegisterPage = () => {
     validatePassword(firstPasswordInput);
     validatePassword(secondPasswordInput);
 
-    if (!mistakes.emailError && !mistakes.passwordError && !mistakes.passwordsIdentityError) {
+    if (!hasErrors) {
       let result = await registerUser(emailInput, firstPasswordInput);
       if(result.seccesfull){
         console.log(result.body.user);
+        setUser(result);
+        navigate('/');
         showSeccess("Welcome to Sport Shop");
+        
       }else{
         console.log(result.body.error); 
         showError(result.body.error.message);
       }
     }
   }
-
-  const hasErrors = 
-    !emailInput ||
-    !firstPasswordInput ||
-    !secondPasswordInput ||
-    mistakes.emailError !== "" ||
-    mistakes.passwordError !== "" ||
-    mistakes.passwordsIdentityError !== "";
 
 
 

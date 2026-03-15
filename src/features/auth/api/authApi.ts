@@ -2,7 +2,7 @@ import { registerUserFirebase } from "../../../firebase/firebaseAuthApi";
 
 export type RegisterReturn = SuccessReturn | ErrorReturn;
 
-type ErrorReturn = {
+export type ErrorReturn = {
   seccesfull: false;
   body: {
     error: {
@@ -12,7 +12,7 @@ type ErrorReturn = {
   };
 };
 
-type SuccessReturn = {
+export type SuccessReturn = {
   seccesfull: true;
   body: {
     user: any; // або firebase.User якщо юзати Firebase SDK типи
@@ -27,7 +27,7 @@ export const registerUser = async (
     const credentials = await registerUserFirebase(email, password);
     return {
       seccesfull: true,
-      body: { user: credentials },
+      body: { user: credentials.user },
     };
   } catch (error: any) {
     let message = "Fail in trying to register";

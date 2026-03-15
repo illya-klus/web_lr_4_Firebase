@@ -12,8 +12,9 @@ import ProfilePage from '../features/profile/ui/ProfilePage';
 import Cart from '../features/cart/ui/Cart';
 import ProfileHistory from '../features/profile/ui/ProfileHistory';
 import AuthLayout from './AuthLayout';
-import RegisterPage from '../features/auth/ui/RegisterPage';
+
 import LoginPage from '../features/auth/ui/LoginPage';
+import RegisterPageHok  from '../features/auth/ui/RegisterPageHok';
 
 
 
@@ -49,7 +50,7 @@ const router = createBrowserRouter([
     path:'/auth',
     element: <AuthLayout/>,
     children:[
-      { path: 'register', element: <RegisterPage/> },
+      { path: 'register', element: <RegisterPageHok/> },
       { path: 'login', element: <LoginPage/> }
     ],
   },
