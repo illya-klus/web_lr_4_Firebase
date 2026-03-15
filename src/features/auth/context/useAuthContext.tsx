@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import { SuccessReturn } from "../api/authApi";
+import avatar from "/public/images/avatar.jpg";
 
 
 export type User = {
@@ -9,6 +10,7 @@ export type User = {
     userId : string | "none";
     role: "admin" | "user" | "anon";
     authStatus : "identify" | "not_identify";
+    photoUrl : string;
 }
 
 
@@ -38,6 +40,7 @@ const defaultUserData : User = {
         userName : "user_92348", 
         userPhoneNumber : "",
         userId: "none",
+        photoUrl: avatar,
     };
 
 export const AuthProvider = ({children} : {children : ReactNode}) => {
@@ -64,11 +67,13 @@ export const AuthProvider = ({children} : {children : ReactNode}) => {
         const responceUser = result.body.user;
         let userData = {
             userEmail: responceUser.email,
-            userName: "no_name",
+            userName: responceUser.displayName ? responceUser.displayName : "no_name",
             userPhoneNumber: "",
             userId: responceUser.uid,
             role: "user",
             authStatus: "identify",
+            photoUrl : avatar,
+            //responceUser.photoURL,
         } as User;
         setUserFullData(userData);
     }

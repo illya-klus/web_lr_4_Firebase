@@ -5,6 +5,7 @@ import { useErrorModal } from "../../../modals/error/hooks/useErrorModal";
 import { useSeccessModal } from "../../../modals/seccess/hooks/useSeccessModal";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuthContext";
+import { AuthBtns } from "./AuthBtns";
 
 
 
@@ -120,7 +121,16 @@ const RegisterPage = () => {
           Register
         </button>
 
+                    <div className="flex items-center gap-2 my-4">
+              <div className="flex-1 h-px bg-gray-200"></div>
+              <span className="text-sm text-gray-400">or</span>
+              <div className="flex-1 h-px bg-gray-200"></div>
+            </div>
+            <AuthBtns />
+
       </form>
+
+
 
     </div>
   );
