@@ -1,5 +1,10 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import useValidation from "../hooks/useValidation";
+import { useAuth } from "../context/useAuthContext";
+import { loginUser } from "../api/authApi";
+import { useNavigate } from "react-router-dom";
+import { useErrorModal } from "../../../modals/error/hooks/useErrorModal";
+import { useSeccessModal } from "../../../modals/seccess/hooks/useSeccessModal";
 
 
 
@@ -7,8 +12,11 @@ import useValidation from "../hooks/useValidation";
 const LoginPage = () => {
   const [emailInput, setEmailInput] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
-
   const {mistakes, validateEmail, validatePassword} = useValidation();
+  const {setUserDataFromResponce} = useAuth();
+  const navigate = useNavigate();
+  let {showError, ErrorModalComponent} = useErrorModal();
+  let {showSeccess, SeccessModalComponent} = useSeccessModal();
 
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -20,15 +28,24 @@ const LoginPage = () => {
     validatePassword(e.target.value);
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     validateEmail(emailInput);
     validatePassword(passwordInput);
 
-    if (!mistakes.emailError && !mistakes.passwordError) {
-      console.log("Form valid", { emailInput, passwordInput });
+    if (!hasErrors) {
+      let result = await loginUser(emailInput, passwordInput);
+      if(result.seccesfull){
+        console.log(result.body.user);
+        setUserDataFromResponce(result);
+        navigate('/');
+        showSeccess("Welcome back to Sport Shop");
+      }else{
+        console.log(result.body.error); 
+        showError(result.body.error.message);
+      }
     }
-  };
+  }
 
   const hasErrors = 
     !emailInput ||
@@ -39,6 +56,9 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 pt-50 px-4 sm:flex sm:items-center sm:justify-center sm:p-0">
+      <SeccessModalComponent/>
+      <ErrorModalComponent/>
+      
       <form
         onSubmit={handleSubmit}
         noValidate

@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useContext, useState } from "react";
+import { SuccessReturn } from "../api/authApi";
 
 
 export type User = {
@@ -17,6 +18,7 @@ type AuthContextType = {
     setUserAsNotIdentify : () => void;
     setUserData : (email: string, name: string, number: string) => void;
     setUserFullData: (newUser: Partial<User>) => void;
+    setUserDataFromResponce: (result : SuccessReturn) => void;
 }
 
 
@@ -58,6 +60,19 @@ export const AuthProvider = ({children} : {children : ReactNode}) => {
         setAuthState(prev => ({ ...prev, ...newUser }));
     }
 
+    const setUserDataFromResponce = (result : SuccessReturn) => {
+        const responceUser = result.body.user;
+        let userData = {
+            userEmail: responceUser.email,
+            userName: "",
+            userPhoneNumber: "",
+            userId: responceUser.uid,
+            role: "user",
+            authStatus: "identify",
+        } as User;
+        setUserFullData(userData);
+    }
+
 
     return(
         <AuthContext.Provider value={{
@@ -66,6 +81,7 @@ export const AuthProvider = ({children} : {children : ReactNode}) => {
             setUserAsNotIdentify,
             setUserData,
             setUserFullData,
+            setUserDataFromResponce,
         }}>
             {children}
         </AuthContext.Provider>

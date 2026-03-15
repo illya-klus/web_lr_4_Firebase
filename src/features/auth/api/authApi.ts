@@ -1,6 +1,9 @@
-import { registerUserFirebase } from "../../../firebase/firebaseAuthApi";
+import {
+  loginUserFirebase,
+  registerUserFirebase,
+} from "../../../firebase/firebaseAuthApi";
 
-export type RegisterReturn = SuccessReturn | ErrorReturn;
+export type AuthReturn = SuccessReturn | ErrorReturn;
 
 export type ErrorReturn = {
   seccesfull: false;
@@ -22,7 +25,7 @@ export type SuccessReturn = {
 export const registerUser = async (
   email: string,
   password: string,
-): Promise<RegisterReturn> => {
+): Promise<AuthReturn> => {
   try {
     const credentials = await registerUserFirebase(email, password);
     return {
@@ -34,6 +37,34 @@ export const registerUser = async (
 
     if (error.code === "auth/api-key-not-valid") {
       message = "Не вірний API ключ Firebase. Перевір конфігурацію.";
+    } else if (error.code === "auth/email-already-in-use") {
+      message = "Ця пошта вже використовується.";
+    }
+
+    return {
+      seccesfull: false,
+      body: {
+        error: { code: error.code, message },
+      },
+    };
+  }
+};
+
+export const loginUser = async (
+  email: string,
+  password: string,
+): Promise<AuthReturn> => {
+  try {
+    const credentials = await loginUserFirebase(email, password);
+    return {
+      seccesfull: true,
+      body: { user: credentials.user },
+    };
+  } catch (error: any) {
+    let message = "Fail in trying to register";
+    console.log(error.message);
+    if (error.code === "auth/invalid-credential") {
+      message = "Не вірна пошта або пароль";
     } else if (error.code === "auth/email-already-in-use") {
       message = "Ця пошта вже використовується.";
     }

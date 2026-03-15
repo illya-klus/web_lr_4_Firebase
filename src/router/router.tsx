@@ -14,7 +14,7 @@ import ProfileHistory from '../features/profile/ui/ProfileHistory';
 import AuthLayout from './AuthLayout';
 
 import LoginPage from '../features/auth/ui/LoginPage';
-import RegisterPageHok  from '../features/auth/ui/RegisterPageHok';
+import RegisterPage from '../features/auth/ui/RegisterPage';
 
 
 
@@ -50,7 +50,7 @@ const router = createBrowserRouter([
     path:'/auth',
     element: <AuthLayout/>,
     children:[
-      { path: 'register', element: <RegisterPageHok/> },
+      { path: 'register', element: <RegisterPage/> },
       { path: 'login', element: <LoginPage/> }
     ],
   },

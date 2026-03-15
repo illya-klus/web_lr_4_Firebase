@@ -1,21 +1,20 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import useValidation from "../hooks/useValidation";
-import { registerUser, SuccessReturn } from "../api/authApi";
+import { registerUser } from "../api/authApi";
 import { useErrorModal } from "../../../modals/error/hooks/useErrorModal";
 import { useSeccessModal } from "../../../modals/seccess/hooks/useSeccessModal";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/useAuthContext";
 
 
-type Props = {
-  setUser : (result : SuccessReturn) => void;
-}
 
-
-const RegisterPage = ({setUser} : Props) => {
+const RegisterPage = () => {
+  const {setUserDataFromResponce} = useAuth();
   
   const navigate = useNavigate();
   let {showError, ErrorModalComponent} = useErrorModal();
   let {showSeccess, SeccessModalComponent} = useSeccessModal();
+  
   let [emailInput, setEmailInput] = useState<string>("");
   let [firstPasswordInput, setFirstPasswordInput] = useState<string>("");
   let [secondPasswordInput, setSecondPasswordInput] = useState<string>("");
@@ -53,7 +52,7 @@ const RegisterPage = ({setUser} : Props) => {
       let result = await registerUser(emailInput, firstPasswordInput);
       if(result.seccesfull){
         console.log(result.body.user);
-        setUser(result);
+        setUserDataFromResponce(result);
         navigate('/');
         showSeccess("Welcome to Sport Shop");
         
