@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router";
 import { useAuth } from "../features/auth/context/useAuthContext";
+import { useConfirmModal } from "../modals/confirm/hook/useConfirmModal";
 
 
 
@@ -37,9 +38,13 @@ const NavigationBtn = ({text, to} : NavBtnsProps) => {
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const {user, setUserAsNotIdentify} = useAuth();
+    const {showModal, ConfirmModalComponent} = useConfirmModal(() => setUserAsNotIdentify());
+    let alertMessage = "Ви впевнені що хочете вийти з акаунту?\nВсі дані буде збережено."
+
 
     return(
         <header className="text-lg sm:text-xl fixed top-2 w-full flex flex-col items-center justify-center z-50 px-2 sm:px-0">
+            <ConfirmModalComponent/>
 
             <div className="max-w-300 p-4 sm:p-7 w-full flex flex-wrap sm:flex-row justify-between items-center gap-4 sm:gap-0 bg-[#2b2b2be7] text-white shadow-lg rounded-xl">
                 <button
@@ -54,10 +59,12 @@ const Header = () => {
                 <nav className="hidden sm:flex flex-wrap justify-center sm:justify-start gap-4 sm:gap-7 w-full sm:w-auto">
                     {NavBasicItems.map((item)=> <NavigationBtn key={item.to} to={item.to} text={item.text}/>)}
                 </nav>
-                {user.authStatus === 'not_identify' && 
+                {user.authStatus === 'not_identify' ?
                     <nav className="hidden sm:flex gap-4 sm:gap-5 w-full sm:w-auto justify-center sm:justify-end">
                         {NavAuthItems.map((item)=> <NavigationBtn key={item.to} to={item.to} text={item.text}/>)}
                     </nav>
+                    :
+                    <button className="cursor-pointer hidden sm:block text-2xl" onClick={() => showModal(alertMessage)}>Log Out</button>
                 }
             </div>
 
@@ -70,7 +77,7 @@ const Header = () => {
 
                     <div className="border-t border-gray-600 pt-4 flex flex-col gap-4">
                         {user.authStatus === "identify" 
-                            ? <button onClick={setUserAsNotIdentify}>Log Out</button> 
+                            ? <button onClick={() => showModal(alertMessage)}>Log Out</button> 
                             : NavAuthItems.map((item) => (
                                 <NavigationBtn key={item.to} to={item.to} text={item.text} />
                         ))}
