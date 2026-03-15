@@ -1,6 +1,8 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { SuccessReturn } from "../api/authApi";
 import avatar from "/public/images/avatar.jpg";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useSeccessModal } from "../../../modals/seccess/hooks/useSeccessModal";
 
 
 export type User = {
@@ -44,6 +46,7 @@ const defaultUserData : User = {
     };
 
 export const AuthProvider = ({children} : {children : ReactNode}) => {
+    const {showSeccess, SeccessModalComponent} = useSeccessModal();
     let [authState, setAuthState] = useState<User>(defaultUserData);
 
     const setUserAsIdentify = () => {
@@ -78,6 +81,29 @@ export const AuthProvider = ({children} : {children : ReactNode}) => {
         setUserFullData(userData);
     }
 
+    useEffect(() => {
+        const auth = getAuth();
+        const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+          if (firebaseUser) {
+            // Користувач залогінений — оновлюємо контекст
+            setUserFullData({
+              userEmail: firebaseUser.email || "",
+              userName: firebaseUser.displayName || "no_name",
+              userId: firebaseUser.uid,
+              authStatus: "identify",
+              role: "user",
+              photoUrl:  avatar, //firebaseUser.photoURL || avatar
+            });
+            showSeccess("Раді вас знову бачити!");
+          } else {
+            // Користувач не залогінений — повертаємо анонімного
+            setUserFullData(defaultUserData);
+          }
+        });
+
+        return () => unsubscribe(); // чистимо підписку при демонт
+    }, []);
+
 
     return(
         <AuthContext.Provider value={{
@@ -88,6 +114,7 @@ export const AuthProvider = ({children} : {children : ReactNode}) => {
             setUserFullData,
             setUserDataFromResponce,
         }}>
+            <SeccessModalComponent/>
             {children}
         </AuthContext.Provider>
     );

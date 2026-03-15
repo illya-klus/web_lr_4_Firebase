@@ -6,10 +6,6 @@ import router from "./router/router"
 import { AuthProvider } from "./features/auth/context/useAuthContext"
 
 
-
-
-
-
 function App() {
 
   return (
